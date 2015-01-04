@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Current</title>
+		<link rel="stylesheet" href="/style.css">
+		<link rel="stylesheet" href="/jquery/jquery-ui.css">
+		<script src="/jquery/jquery.min.js"></script>
+		<script src="/jquery/jquery-ui.js"></script>
+		<script>
+			$(function() {
+				$("#startDate").datepicker();
+				$("#startDate").change(function() {
+					console.log(new Date(this.value));
+				});
+				$("#endDate").datepicker();
+				$("#endDate").change(function() {
+					console.log(new Date(this.value));
+				});
+				$('#update').click(function() {
+					var data = {};
+					data.startDate = new Date($('#startDate').val());
+					data.endDate = new Date($('#endDate').val());
+					data.message = $('#message').val();
+					data.subject = $('#subject').val();
+					console.log(data);
+					$.post( window.location, data, function(d, status){ if (status === "success"){ location.reload();}}, 'json');
+				});
+			});
+		</script>
+</head>
+<body>
+	<h2><%= user %></h2>
+	<div>Start: <input id="startDate" type="text" value="<%= new Date(state.startDate).toLocaleDateString() %>"></div>
+	<div>End: <input id="endDate" type="text" value="<%= new Date(state.endDate).toLocaleDateString() %>"></div>
+	<div>Subject: <input id="subject" type="text" value="<%= state.subject %>"></div>
+	<div><textarea name="message" id="message" cols="30" rows="10"><%= state.message %></textarea><div>
+	<div><span class="button" id="update">Update</span></div>
+	<div id="list" >You received mail from:
+		<ul>
+			<% for (var i=0; i<state.list.length; i++) { %>
+			<li><%= state.list[i] %></li>
+			<% } %>
+		</ul>
+	</div>
+
+</body>
+</html>
