@@ -17,3 +17,13 @@
 #startDate, #endDate {
 	left: 10px;
 }
+
+label {
+	float: left;
+	width: 50px;
+	text-align: right;
+    margin-right: 0.5em;
+
+    white-space: nowrap;
+    overflow: hidden;
+}

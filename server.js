@@ -11,10 +11,10 @@ var config = require('./config.js');
 var db = mongo.db(config.mongourl, {native_parser:true});
 db.bind('vacation');
 
+app.use(logger('combined'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
-app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(multer);
@@ -26,9 +26,9 @@ app.use(session({
 		maxAge: 31536000000
 	}
 }));
-app.use(logger('combined'));
 
 app.get('/', function(req,res){
+	console.log("session: %j", req.session);
 	if (req.session.username) {
 		res.redirect('/user/' + req.session.username);
 	} else {
@@ -38,8 +38,12 @@ app.get('/', function(req,res){
 
 app.post('/login', function(req,res){
 	if (req.body.id) {
-		req.session.username = req.body.id;
-		res.redirect('/user/' + req.body.id);
+		if (req.body.id.indexOf(config.domain)) {
+			var user = req.body.id.substring(0,req.body.id.indexOf(config.domain)-1);
+			console.log(user);
+			req.session.username = user;
+			res.redirect('/user/' + user);
+		}
 	}
 });
 
@@ -77,7 +81,7 @@ app.get('/user/:user', function(req, res){
 			res.send(404, 'not found');
 		} else {
 			console.log("%j", item);
-			res.render('user', {user: req.params.user, state: item});
+			res.render('user', {user: req.params.user, domain: config.domain, state: item});
 		}
 	});
 
@@ -93,6 +97,8 @@ app.post('/user/:user', function(req, res){
 	});
 	res.json({foo:'bar'});
 });
+
+app.use(express.static(__dirname + '/public'));
 
 var server = app.listen(3000, function() {
 
