@@ -21,3 +21,8 @@ Configure
 =========
 
 Edit the config.js to set the email domain and outgoing SMTP server
+
+add the following to the users .forward file
+
+\<username>, "| node receiver.js <username>"
+
