@@ -22,7 +22,8 @@
 					data.message = $('#message').val();
 					data.subject = $('#subject').val();
 					console.log(data);
-					$.post( window.location, data, function(d, status){ if (status === "success"){ location.reload();}}, 'json');
+					var postData = JSON.stringify(data);
+					$.post( window.location, postData, function(d, status){ if (status === "success"){ location.reload();}}, 'json');
 				});
 			});
 		</script>

@@ -51,9 +51,10 @@ if (process.argv.length == 3) {
 										if(err) {
 											console.log(err);
 										}
+										//console.log(doc.message)
 										template('response', {message: doc.message}, function(err, html, text) {
-											console.log(html);
-											console.log(text);
+											//console.log(html);
+											//console.log(text);
 
 											var mailOptions = {
 											    from: useremail,
